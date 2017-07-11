@@ -6,14 +6,14 @@ using Clustering
 """Read GLISTIN annotation file."""
 function readannot(filename::String)
     data = Dict()
-    open(filename) do f
-        for line in eachline(f)
-            if !startswith(line, ';')
-                tokens = split(line, ['(', '='])
-                data[strip(tokens[1])] = strip(tokens[end])
-            end
+    f = open(filename)
+    for line in eachline(f)
+        if !startswith(line, ';')
+            tokens = split(line, ['(', '='])
+            data[strip(tokens[1])] = strip(tokens[end])
         end
     end
+    close(f)
     return data
 end
 
@@ -22,9 +22,9 @@ function loadfile(filename:: String)
     annot = readannot(replace(filename, "prc.sch", "ann"))
     nc = parse(Int, annot["SCH Number of Cross Track Samples"])
     nr = parse(Int, annot["SCH Number of Along Track Lines"])
-    open(filename) do f
-        data = read(f, Float32, (nc, nr))
-    end
+    f = open(filename)
+    data = read(f, Float32, (nc, nr))
+    close(f)
     return data'
 end
 
