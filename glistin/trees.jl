@@ -64,7 +64,9 @@ function classify_trees(error::Array{Float32, 2}, nx=300, ny=300, xincr=100, yin
             j1 = j
             j2 = min(j+nx, nc)
             h = error[i1:i2, j1:j2]
-            trees[i1:i2, j1:j2] = classify_block(h)
+            t = classify_block(h)
+            t[trees[i1:i2, j1:j2]] = true
+            trees[i1:i2, j1:j2] = t
             println("$i of $nr, $j of $nc")
         end
     end
